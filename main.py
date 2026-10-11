@@ -51,18 +51,36 @@ def main():
     report = PerformanceReport()
 
     # -------------------------------------------------
-    # Open Video
+    # Select Video Source
     # -------------------------------------------------
 
-    cap = cv2.VideoCapture(VIDEO_PATH)
+    print("\nChoose input source:")
+    print("1. Uploaded Video")
+    print("2. Live Webcam")
+    
+    choice = input("Enter choice (1 or 2): ").strip()
+
+    if choice == "1":
+
+        cap = cv2.VideoCapture(VIDEO_PATH)
+        output_path = "outputs/output.mp4"
+    
+    elif choice == "2":
+        cap = cv2.VideoCapture(0)
+        output_path = "outputs/webcam_output.mp4"
+
+    else:
+        print("Invalid choice.")
+        return
 
     if not cap.isOpened():
-
-        print("Cannot open video.")
-
+        print("Cannot open selected video source.")
         return
 
     fps = cap.get(cv2.CAP_PROP_FPS)
+
+    if fps <= 0:
+        fps = 20.0
 
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 
@@ -76,7 +94,7 @@ def main():
 
     video_writer = cv2.VideoWriter(
 
-        "outputs/output.mp4",
+        output_path,
 
         fourcc,
 
@@ -97,6 +115,8 @@ def main():
     exit_count = 0
 
     max_occupancy = 0
+
+    max_person_count = 0
 
     latencies = []
 
@@ -141,6 +161,13 @@ def main():
         # ---------------------------------------------
 
         tracks = tracker.track(frame)
+
+        current_person_count = len(tracks)
+
+        max_person_count = max(
+            max_person_count,
+            current_person_count
+        )
 
         cv2.putText(
 
@@ -432,7 +459,7 @@ def main():
 
     print("\n========== Processing Finished ==========")
 
-    print("Output Video        : outputs/output.mp4")
+    print(f"Output Video        : {output_path}")
 
     print("CSV Events          : outputs/events.csv")
 
@@ -443,6 +470,8 @@ def main():
     print(f"Average FPS         : {processing_fps:.2f}")
 
     print(f"Average Latency     : {average_latency*1000:.2f} ms")
+
+    print(f"Max Person Count    : {max_person_count}")
 
 
 if __name__ == "__main__":

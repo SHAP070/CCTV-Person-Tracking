@@ -10,7 +10,7 @@ All configurable parameters of the project are stored here.
 
 # VIDEO_PATH = "input/Hike Vision.mp4"
 # VIDEO_PATH = "input/terrace2-c0.avi"
-VIDEO_PATH = "input/campus4-c0.avi"
+VIDEO_PATH = "input/3555887293-preview.mp4"
 
 OUTPUT_VIDEO = "output/output.mp4"
 
@@ -22,13 +22,13 @@ OUTPUT_CSV = "output/events.csv"
 # -------------------------------
 
 # YOLO11 small model
-YOLO_MODEL = "yolo11s.pt"
+YOLO_MODEL = "yolo11m.pt"
 
 # Detect only people
 PERSON_CLASS = 0
 
 # Detection confidence
-CONFIDENCE = 0.20
+CONFIDENCE = 0.10
 
 
 # -------------------------------
